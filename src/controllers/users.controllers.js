@@ -1,5 +1,6 @@
 const usersCrtl = {};
-const User = require("../models/User")
+const User = require("../models/User");
+const passport = require("passport");
 
 usersCrtl.renderSignUpForm = (req, res) => {
     res.render("users/signup")
@@ -40,13 +41,17 @@ usersCrtl.renderSignInForm = (req, res) => {
 }
 
 
-usersCrtl.signIn = (req, res) => {
-    res.sen("signin")
-}
+usersCrtl.signIn = passport.authenticate("local", {
+    failureRedirect: "/users/signin",
+    successRedirect:"/notes",
+    failureFlash: true
+})
 
 
 usersCrtl.logOut = (req, res) => {
-    res.send("logout")
+    req.logout();
+    req.flash("success_msg", "You are logged out now");
+    res.redirect("/users/signin");
 }
 
 
